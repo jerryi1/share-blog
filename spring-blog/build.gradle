@@ -1,0 +1,56 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.3.RELEASE'
+    }
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "http://repo.spring.io/libs-snapshot" }
+        maven { url "https://mvnrepository.com" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10'
+    }
+}
+
+configure(allprojects) {
+    project ->
+        apply plugin: 'java'
+        apply plugin: 'idea'
+        apply plugin: 'org.springframework.boot'
+
+        group = 'com.maxtropy'
+
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+
+        tasks.withType(JavaCompile) {
+            options.encoding = "UTF-8"
+        }
+
+        repositories {
+            maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+            mavenLocal()
+            jcenter()
+            mavenCentral()
+        }
+
+}
+
+configure(subprojects) { subproject ->
+    apply plugin: 'io.spring.dependency-management'
+
+    jar {
+        enabled = true
+    }
+
+    dependencyManagement {
+        dependencies {
+            dependency 'org.projectlombok:lombok:1.16.18'
+        }
+    }
+}
+
+
